@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://bt2ohrx77xsth"]
+
+[ext_resource type="Texture2D" uid="uid://coreoc3bguv2l" path="res://environment/collision.png" id="1_r2lkf"]
+
+[sub_resource type="GDScript" id="GDScript_w5hry"]
+script/source = "extends Sprite2D
+
+@onready var ui = $\"../UI/\"	   
+
+func _ready():
+	Game.isGameOver = false
+
+func _on_finish_line_body_entered(body):
+	if body.name == \"Player\":
+		Game.isGameOver = true
+		ui.showGameOver(true)
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vgxn2"]
+size = Vector2(32, 32)
+
+[node name="FinishLine" type="Sprite2D"]
+texture = ExtResource("1_r2lkf")
+script = SubResource("GDScript_w5hry")
+
+[node name="FinishLine" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FinishLine"]
+shape = SubResource("RectangleShape2D_vgxn2")
+
+[connection signal="body_entered" from="FinishLine" to="." method="_on_finish_line_body_entered"]

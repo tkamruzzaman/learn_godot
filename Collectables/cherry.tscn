@@ -1,0 +1,76 @@
+[gd_scene load_steps=10 format=3 uid="uid://ck7xilh15kcvm"]
+
+[ext_resource type="Texture2D" uid="uid://8d8kr8uksi7m" path="res://Collectables/cherry.png" id="1_q7o8q"]
+
+[sub_resource type="GDScript" id="GDScript_pdcnk"]
+script/source = "extends Area2D
+
+func _on_body_entered(body):
+	if body.name == \"Player\":
+		Game.Gold += 5
+		var moveTween = get_tree().create_tween()
+		moveTween.tween_property(self, \"position\", position - Vector2(0,25), 0.3)
+		var fadeTween = get_tree().create_tween()
+		fadeTween.tween_property(self, \"modulate:a\", 0, 0.3)
+		moveTween.tween_callback(queue_free)
+"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6vib4"]
+radius = 7.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g1vqt"]
+atlas = ExtResource("1_q7o8q")
+region = Rect2(0, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0xd87"]
+atlas = ExtResource("1_q7o8q")
+region = Rect2(21, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_npyg4"]
+atlas = ExtResource("1_q7o8q")
+region = Rect2(42, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ja77"]
+atlas = ExtResource("1_q7o8q")
+region = Rect2(63, 0, 21, 21)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2r156"]
+atlas = ExtResource("1_q7o8q")
+region = Rect2(84, 0, 21, 21)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wdmhs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g1vqt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0xd87")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_npyg4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ja77")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2r156")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[node name="Cherry" type="Area2D"]
+script = SubResource("GDScript_pdcnk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-3, 0)
+shape = SubResource("CircleShape2D_6vib4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_wdmhs")
+animation = &"Idle"
+autoplay = "Idle"
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
